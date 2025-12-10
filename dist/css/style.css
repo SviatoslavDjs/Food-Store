@@ -402,6 +402,8 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  row-gap: 20px;
 }
 .menu .title {
   text-align: center;
