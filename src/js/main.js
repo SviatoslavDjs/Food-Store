@@ -128,13 +128,22 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", showModalByScroll);
   //template card
   class MenuCard {
-    constructor(image, alt, subtitle, description, total, parentSelector) {
+    constructor(
+      image,
+      alt,
+      subtitle,
+      description,
+      total,
+      parentSelector,
+      ...classes
+    ) {
       this.image = image;
       this.subtitle = subtitle;
       this.description = description;
       this.alt = alt;
       this.total = total;
       this.transfer = 41;
+      this.classes = classes;
       this.parentSelector =
         document.querySelector(parentSelector).firstElementChild;
       this.changeToUAH();
@@ -144,7 +153,13 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     addContentCard() {
       const element = document.createElement("div");
-      element.classList.add("menu__item");
+
+      if (this.classes.length === 0) {
+        this.classes = "menu__item";
+        element.classList.add(this.classes);
+      } else {
+        this.classes.forEach((className) => element.classList.add(className));
+      }
       element.innerHTML = `
  <img src="${this.image}" alt="${this.alt}">
                     <h3 class="menu__item-subtitle">${this.subtitle}</h3>
@@ -165,7 +180,8 @@ window.addEventListener("DOMContentLoaded", () => {
     'Меню "Фітнес"',
     "Меню «Фітнес» — це новий підхід до приготування страв: більше свіжих овочів і фруктів. Продукт для активних та здорових людей. Це абсолютно новий продукт з оптимальною ціною та високою якістю!",
     9,
-    ".menu__field"
+    ".menu__field",
+    "menu__item"
   ).addContentCard();
   new MenuCard(
     "img/tabs/elite.jpg",
@@ -173,7 +189,8 @@ window.addEventListener("DOMContentLoaded", () => {
     "Меню “Преміум”",
     "У меню «Преміум» ми використовуємо не лише гарний дизайн упаковки, а й високу якість приготування страв. Червона риба, морепродукти, фрукти — ресторанне меню без походу до ресторану за хорошою ціною.",
     11,
-    ".menu__field"
+    ".menu__field",
+    "menu__item"
   ).addContentCard();
   new MenuCard(
     "img/tabs/post.jpg",
@@ -181,6 +198,51 @@ window.addEventListener("DOMContentLoaded", () => {
     'Меню "Пісне"',
     "Меню «Пісне» — це ретельний підбір інгредієнтів: повна відсутність продуктів тваринного походження, молоко з мигдалю, вівса, кокоса або гречки, правильна кількість білків за рахунок тофу та імпортних вегетаріанських стейків.",
     8,
-    ".menu__field"
+    ".menu__field",
+    "menu__item"
   ).addContentCard();
+  //forms
+  const forms = document.querySelectorAll("form");
+  const message = {
+    loading: "Загрузка...",
+    success: "Дякую, скоро ми зв'яжемось з вами!",
+    failure: "Щось пішло не так...",
+  };
+  forms.forEach((item) => {
+    postData(item);
+  });
+
+  function postData(form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const statusMessage = document.createElement("div");
+      statusMessage.classList.add("status");
+      statusMessage.textContent = message.loading;
+      form.append(statusMessage);
+
+      const request = new XMLHttpRequest();
+      request.open("POST", "server.php");
+      request.setRequestHeader("Content-type", "application/json");
+      const formData = new FormData(form);
+      const object = {};
+      formData.forEach(function (value, key) {
+        object[key] = value;
+      });
+      const json = JSON.stringify(object);
+
+      request.send(json);
+      request.addEventListener("load", () => {
+        if (request.status === 200) {
+          console.log(request.response);
+          statusMessage.textContent = message.success;
+          form.reset();
+          setTimeout(() => {
+            statusMessage.remove();
+          }, 3000);
+        } else {
+          statusMessage.textContent = message.failure;
+        }
+      });
+    });
+  }
 });

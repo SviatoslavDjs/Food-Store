@@ -125,13 +125,14 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", showModalByScroll);
   //template card
   class MenuCard {
-    constructor(image, alt, subtitle, description, total, parentSelector) {
+    constructor(image, alt, subtitle, description, total, parentSelector, ...classes) {
       this.image = image;
       this.subtitle = subtitle;
       this.description = description;
       this.alt = alt;
       this.total = total;
       this.transfer = 41;
+      this.classes = classes;
       this.parentSelector = document.querySelector(parentSelector).firstElementChild;
       this.changeToUAH();
     }
@@ -140,7 +141,12 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     addContentCard() {
       const element = document.createElement("div");
-      element.classList.add("menu__item");
+      if (this.classes.length === 0) {
+        this.classes = "menu__item";
+        element.classList.add(this.classes);
+      } else {
+        this.classes.forEach(className => element.classList.add(className));
+      }
       element.innerHTML = `
  <img src="${this.image}" alt="${this.alt}">
                     <h3 class="menu__item-subtitle">${this.subtitle}</h3>
@@ -155,9 +161,9 @@ window.addEventListener("DOMContentLoaded", () => {
       this.parentSelector.append(element);
     }
   }
-  new MenuCard("img/tabs/vegy.jpg", "Vegy", 'Меню "Фітнес"', "Меню «Фітнес» — це новий підхід до приготування страв: більше свіжих овочів і фруктів. Продукт для активних та здорових людей. Це абсолютно новий продукт з оптимальною ціною та високою якістю!", 9, ".menu__field").addContentCard();
-  new MenuCard("img/tabs/elite.jpg", "elite", "Меню “Преміум”", "У меню «Преміум» ми використовуємо не лише гарний дизайн упаковки, а й високу якість приготування страв. Червона риба, морепродукти, фрукти — ресторанне меню без походу до ресторану за хорошою ціною.", 11, ".menu__field").addContentCard();
-  new MenuCard("img/tabs/post.jpg", "post", 'Меню "Пісне"', "Меню «Пісне» — це ретельний підбір інгредієнтів: повна відсутність продуктів тваринного походження, молоко з мигдалю, вівса, кокоса або гречки, правильна кількість білків за рахунок тофу та імпортних вегетаріанських стейків.", 8, ".menu__field").addContentCard();
+  new MenuCard("img/tabs/vegy.jpg", "Vegy", 'Меню "Фітнес"', "Меню «Фітнес» — це новий підхід до приготування страв: більше свіжих овочів і фруктів. Продукт для активних та здорових людей. Це абсолютно новий продукт з оптимальною ціною та високою якістю!", 9, ".menu__field", "menu__item").addContentCard();
+  new MenuCard("img/tabs/elite.jpg", "elite", "Меню “Преміум”", "У меню «Преміум» ми використовуємо не лише гарний дизайн упаковки, а й високу якість приготування страв. Червона риба, морепродукти, фрукти — ресторанне меню без походу до ресторану за хорошою ціною.", 11, ".menu__field", "menu__item").addContentCard();
+  new MenuCard("img/tabs/post.jpg", "post", 'Меню "Пісне"', "Меню «Пісне» — це ретельний підбір інгредієнтів: повна відсутність продуктів тваринного походження, молоко з мигдалю, вівса, кокоса або гречки, правильна кількість білків за рахунок тофу та імпортних вегетаріанських стейків.", 8, ".menu__field", "menu__item").addContentCard();
 });
 /******/ })()
 ;
