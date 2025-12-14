@@ -88,7 +88,6 @@ window.addEventListener("DOMContentLoaded", () => {
   //modal
   const modal = document.querySelector(".modal");
   const btn = document.querySelectorAll("[data-modal]");
-  const close = document.querySelector("[data-close]");
   btn.forEach(button => {
     button.addEventListener("click", openModal);
   });
@@ -104,9 +103,8 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.remove("show");
     document.body.style.overflow = "";
   }
-  close.addEventListener("click", closeModel);
   modal.addEventListener("click", event => {
-    if (event.target === modal) {
+    if (event.target === modal || event.target.getAttribute("data-close") == "") {
       closeModel();
     }
   });
@@ -115,7 +113,7 @@ window.addEventListener("DOMContentLoaded", () => {
       closeModel();
     }
   });
-  const modalTimerId = setTimeout(openModal, 20000);
+  const modalTimerId = setTimeout(openModal, 50000);
   function showModalByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
       openModal();
@@ -164,6 +162,76 @@ window.addEventListener("DOMContentLoaded", () => {
   new MenuCard("img/tabs/vegy.jpg", "Vegy", 'Меню "Фітнес"', "Меню «Фітнес» — це новий підхід до приготування страв: більше свіжих овочів і фруктів. Продукт для активних та здорових людей. Це абсолютно новий продукт з оптимальною ціною та високою якістю!", 9, ".menu__field", "menu__item").addContentCard();
   new MenuCard("img/tabs/elite.jpg", "elite", "Меню “Преміум”", "У меню «Преміум» ми використовуємо не лише гарний дизайн упаковки, а й високу якість приготування страв. Червона риба, морепродукти, фрукти — ресторанне меню без походу до ресторану за хорошою ціною.", 11, ".menu__field", "menu__item").addContentCard();
   new MenuCard("img/tabs/post.jpg", "post", 'Меню "Пісне"', "Меню «Пісне» — це ретельний підбір інгредієнтів: повна відсутність продуктів тваринного походження, молоко з мигдалю, вівса, кокоса або гречки, правильна кількість білків за рахунок тофу та імпортних вегетаріанських стейків.", 8, ".menu__field", "menu__item").addContentCard();
+  //forms
+  const forms = document.querySelectorAll("form");
+  const message = {
+    loading: "img/form/spinner.svg",
+    success: "Дякую, скоро ми зв'яжемось з вами!",
+    failure: "Щось пішло не так..."
+  };
+  forms.forEach(item => {
+    postData(item);
+  });
+  function postData(form) {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const statusMessage = document.createElement("img");
+      statusMessage.src = message.loading;
+      statusMessage.style.cssText = `display: block; margin: 0 auto; height: 40px; z-index: 100`;
+      form.insertAdjacentElement("afterend", statusMessage);
+      const formData = new FormData(form);
+      const object = {};
+      formData.forEach(function (value, key) {
+        object[key] = value;
+      });
+      fetch("server.php", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(object)
+      }).then(data => data.text()).then(data => {
+        console.log(data);
+        showThanksModal(message.success);
+        statusMessage.remove();
+      }).catch(() => {
+        showThanksModal(message.failure);
+      }).finally(() => {
+        form.reset();
+      });
+
+      // request.addEventListener("load", () => {
+      //   if (request.status === 200) {
+      //     console.log(request.response);
+      //     showThanksModal(message.success);
+      //     form.reset();
+      //     statusMessage.remove();
+      //   } else {
+      //     showThanksModal(message.failure);
+      //   }
+      // });
+    });
+  }
+  function showThanksModal(message) {
+    const prevModalDialog = document.querySelector(".modal__dialog");
+    prevModalDialog.classList.add("hide");
+    openModal();
+    const thanksModal = document.createElement("div");
+    thanksModal.classList.add("modal__dialog");
+    thanksModal.innerHTML = `
+  <div class = "modal__content">
+  <div class="modal__close" data-close>&times;</div>
+  <div class="modal__title">${message}</div>
+  </div>
+  `;
+    document.querySelector(".modal").append(thanksModal);
+    setTimeout(() => {
+      thanksModal.remove();
+      prevModalDialog.classList.add("show");
+      prevModalDialog.classList.remove("hide");
+      closeModel();
+    }, 4000);
+  }
 });
 /******/ })()
 ;
