@@ -22,6 +22,24 @@
       "price": 21
     }
   ],
+  "slides": [
+    {
+      "img": "img/slider/pepper.jpg",
+      "alt": "pepper"
+    },
+    {
+      "img": "img/slider/food-12.jpg",
+      "alt": "food"
+    },
+     {
+      "img": "img/slider/olive-oil.jpg",
+      "alt": "oil"
+    },
+     {
+      "img": "img/slider/paprika.jpg",
+      "alt": "paprika"
+    }    
+  ],
   "requests": [
       
   ]
