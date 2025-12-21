@@ -1,4 +1,4 @@
-import tabs from "./modules/tabs.js";
+import tabsFun from "./modules/tabs.js";
 import timer from "./modules/timer.js";
 import cards from "./modules/cards.js";
 import slider from "./modules/slider.js";
@@ -8,11 +8,10 @@ import calculator from "./modules/calculator.js";
 
 (function () {
   window.addEventListener("DOMContentLoaded", () => {
-    const modalTimerId = setTimeout(
-      openModal(() => openModal(".modal", modalTimerId)),
-      50000
-    );
-    tabs(
+    const modalTimerId = setTimeout(() => {
+      openModal(".modal", modalTimerId);
+    }, 50000);
+    tabsFun(
       ".tabheader__item",
       ".tabcontent",
       ".tabheader__items",
@@ -24,7 +23,7 @@ import calculator from "./modules/calculator.js";
       container: ".offer__slider",
       nextArroww: "[data-next]",
       prevArroww: "[data-prev]",
-      slide: "[data-slide]",
+      slidee: "[data-slide]",
       totalCounter: "[data-total]",
       wrapper: "[data-slides]",
       field: "[data-inner]",

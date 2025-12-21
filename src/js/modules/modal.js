@@ -1,5 +1,5 @@
 function openModal(modalSelector, modalTimerId) {
-  const modal = document.querySelectorAll(modalSelector);
+  const modal = document.querySelector(modalSelector);
   modal.classList.add("show");
   modal.classList.add("fade");
   modal.classList.remove("hide");
@@ -9,7 +9,7 @@ function openModal(modalSelector, modalTimerId) {
   }
 }
 function closeModel(modalSelector) {
-  const modal = document.querySelectorAll(modalSelector);
+  const modal = document.querySelector(modalSelector);
   modal.classList.add("hide");
   modal.classList.remove("show");
   document.body.style.overflow = "";

@@ -1,7 +1,7 @@
 import { getResource } from "./services/services";
 function slider({
   container,
-  slid,
+  slidee,
   nextArroww,
   prevArroww,
   totalCounter,
@@ -34,7 +34,7 @@ function slider({
     const prevArrow = document.querySelector(prevArroww);
     const nextArrow = document.querySelector(nextArroww);
     const currentSlide = document.querySelector(currentCounter);
-    const slide = document.querySelectorAll(slid);
+    const slide = document.querySelectorAll(slidee);
     const total = document.querySelector(totalCounter);
     const slideWrapper = document.querySelector(wrapper);
     const slideField = document.querySelector(field);
@@ -141,7 +141,7 @@ function slider({
     dots.forEach((dot) => {
       dot.addEventListener("click", (e) => {
         const slideTo = e.target.getAttribute("data-slide-to");
-        slideIndex = slideTo;
+        slideIndex = +slideTo;
         offset = deleteNotDigits(width) * (slideTo - 1);
         slideField.style.transform = `translateX(-${offset}px)`;
 
