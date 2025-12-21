@@ -1,3 +1,5 @@
+require("es6-promise").polyfill();
+import "nodelist-foreach-polyfill";
 import tabsFun from "./modules/tabs.js";
 import timer from "./modules/timer.js";
 import cards from "./modules/cards.js";
